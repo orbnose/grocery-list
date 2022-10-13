@@ -1,0 +1,5 @@
+include LICENSE
+include README.md
+recursive-include grocerylist/static *
+recursive-include grocerylist/templates *
+recursive-include docs *

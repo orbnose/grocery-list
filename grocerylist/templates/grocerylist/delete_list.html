@@ -1,0 +1,17 @@
+{% extends 'grocerylist/base.html' %}
+
+{% block title %}Delete List{% endblock title%}</title>
+
+{% block content %}
+    <h1>Delete list for {{list.shopping_date}}...</h1>
+
+    <p>Are you sure you want to delete this grocery list?</p>
+    <form class="m-3" action="{% url 'grocerylist:delete_list' list.pk %}" method="post">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Delete">
+    </form>
+
+    <a href="{% url 'grocerylist:index' %}"><button>No, just take me home!</button></a>
+
+{% endblock content %}

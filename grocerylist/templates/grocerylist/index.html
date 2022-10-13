@@ -1,0 +1,18 @@
+{% extends 'grocerylist/base.html' %}
+
+{% block title %}Grocery List Index{% endblock title%}</title>
+
+{% block content %}
+    <h1>Grocery Lists</h1>
+    <a href="{% url 'grocerylist:new_list' %}"><button>Create new list</button></a>
+
+    <div class="m-5">
+        {% if not lists %}
+            <p>There are no lists.</p>
+        {% else %}
+            {% for list in lists %}
+                <p><a href="{% url 'grocerylist:edit_list' list.pk %}">List for {{ list.shopping_date }}</a></p>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock content %}

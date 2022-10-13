@@ -1,0 +1,44 @@
+{% extends 'grocerylist/base.html' %}
+
+{% block title %}List for {{list.shopping_date}}{% endblock title%}</title>
+
+{% block content %}
+    <h1>Grocery list for {{list.shopping_date}}</h1>
+
+    <a href="{% url 'grocerylist:index' %}"><button>Home</button></a>
+    <a href="{% url 'grocerylist:add_common_items' list.pk %}"><button>Add Common Weekly Items</button></a>
+    <a href="{% url 'grocerylist:sort' list.pk %}"><button>Sort</button></a>
+    
+    <span id="divider" class="ms-5">
+        <a href="{% url 'grocerylist:delete_list' list.pk %}"><button>Delete List</button></a>
+    </span>
+
+    <hr> {# -------------------------------------------------------------------------------------------------------- #}
+    
+    <div class="table-responsive">
+        <table class="table table-responsive table-striped">
+            <tr>
+                <th>{# Empty Delete Column #}</th>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Section</th>
+            </tr>
+            {% for entry in entries %}
+                <tr>
+                    <td><a href="{% url 'grocerylist:delete_entry' entry.pk %}"><button>Delete</button></a></td>
+                    <td>{{entry.item.name}}</td>
+                    <td>{{entry.quantity}}</td>
+                    <td>{{entry.item.group}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
+    <form action="{% url 'grocerylist:edit_list' list.pk %}" method="post">
+        {% csrf_token %}
+        {{entry_form.as_p}}
+        <input type="submit" value="Save">
+    </form>
+    
+
+{% endblock content %}
