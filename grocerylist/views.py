@@ -100,6 +100,9 @@ def process_entry_form(entry_form, grocList):
     if not entry_form.is_valid():
         return False, entry_form
 
+    #lowercase the item name
+    entry_form.cleaned_data['item'] = entry_form.cleaned_data['item'].lower()
+
     # Check if the item already exists. If not, create one.
     submitted_item = entry_form.cleaned_data['item']
     try:
@@ -121,7 +124,7 @@ def process_entry_form(entry_form, grocList):
         # Spellcheck - Check to see if this spells a word according to nltk
         ignore_spelling = entry_form.cleaned_data['ignore_spelling']
         wordlist = words.words()
-        if not submitted_item.lower() in wordlist and ignore_spelling is not True:
+        if not submitted_item in wordlist and ignore_spelling is not True:
             entry_form.add_error('item', "This spelling is not recognized as a valid word. Would you like to ignore spelling?")
             return False, entry_form
         
@@ -162,7 +165,7 @@ def edit_list(request, grocList_pk):
     context = {
         'list': grocList,
         'entries': entries,
-        'entry_form': entry_form,
+        'entry_form': entry_form.render("grocerylist/new_entry_form.html"),
     }
     return render(request, 'grocerylist/edit_list.html', context)
 

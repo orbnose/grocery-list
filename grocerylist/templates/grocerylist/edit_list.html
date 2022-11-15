@@ -15,6 +15,12 @@
 
     <hr> {# -------------------------------------------------------------------------------------------------------- #}
     
+    <form action="{% url 'grocerylist:edit_list' list.pk %}" method="post">
+        {% csrf_token %}
+        {{entry_form}}
+        <input type="submit" value="Save">
+    </form>
+
     <div class="table-responsive">
         <table class="table table-responsive table-striped">
             <tr>
@@ -34,11 +40,7 @@
         </table>
     </div>
     
-    <form action="{% url 'grocerylist:edit_list' list.pk %}" method="post">
-        {% csrf_token %}
-        {{entry_form.as_p}}
-        <input type="submit" value="Save">
-    </form>
+    
     
 
 {% endblock content %}
