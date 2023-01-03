@@ -22,5 +22,3 @@ class EntryForm(Form):
     quantity = forms.CharField(max_length=50, required=False)
     section = forms.ModelChoiceField(queryset=Group.objects.all(), required=False)
     ignore_spelling = forms.BooleanField(initial=False, required=False)
-
-    template_name = "grocerylist/new_entry_form.html"

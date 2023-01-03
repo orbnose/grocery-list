@@ -10,8 +10,16 @@
             <div class="m-3">
                 <u><h5>{{section.group.name}}</h5></u>
                 {% for entry in section.entries%}
-                    {{entry.item.name}}
-                    {% if entry.quantity %} - {{ entry.quantity }}{% endif %}
+                    <div>
+                        <label>
+                            <input type="checkbox" class="strikethrough" value="1">
+                            <span>
+                                {{entry.item.name}}
+                                {% if entry.quantity %} - {{ entry.quantity }}{% endif %}
+                            </span>
+
+                        </label>        
+                    </div>
                     <br>
                 {% endfor %}
             </div>
