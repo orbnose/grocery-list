@@ -14,3 +14,8 @@ class NewListViewTests(TestCase):
         response = self.client.post(reverse('grocerylist:new_list'), data={"shopping_date": "1/1/2023"})
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response["Location"], "/")
+
+    def test_submit_invalid_date(self):
+        response = self.client.post(reverse('grocerylist:new_list'), data={"shopping_date": "30/1/2023"})
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, "Enter a valid date.")
