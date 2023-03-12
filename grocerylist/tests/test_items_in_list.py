@@ -18,8 +18,6 @@ class TestEditListView(TestCase):
 
         # List pk=2
         List.objects.create(shopping_date="2023-01-02")
-
-
     
     def test_no_default_sort_order(self):
         response = self.client.get(reverse("grocerylist:edit_list", args=[1]))
@@ -29,3 +27,9 @@ class TestEditListView(TestCase):
         set_up_expected_defaults()
         response = self.client.get(reverse("grocerylist:edit_list", args=[1]))
         self.assertNotContains(response, NO_DEFAULT_SORT_ORDER_MESSAGE)
+    
+    def test_no_sort_order_slots(self):
+        assert "To be done" == "Done"
+
+    def test_with_at_least_one_sort_order_slot(self):
+        assert "To be done" == "Done"
