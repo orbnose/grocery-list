@@ -9,7 +9,9 @@ from nltk.corpus import words
 from .models import List, Entry, Item, Group, SortOrder
 from .forms import NewListForm, DeleteForm, EntryForm
 
-# Create your views here.
+NO_DEFAULT_SORT_ORDER_MESSAGE = "There is no default sort order defined. Please contact the system administrator."
+NO_SORT_ORDER_SLOTS_MESSAGE = "There are no sections defined in the default sort order. Please contact the system administrator."
+NO_SECTIONS_MESSAGE = "There are no grocery sections available. Please contact the system administrator."
 
 def index(request):
     lists = List.objects.all()
@@ -152,7 +154,8 @@ def process_entry_form(entry_form, grocList):
 def edit_list(request, grocList_pk):
     grocList = get_object_or_404(List, pk=grocList_pk)
     entries = grocList.entry_set.all()
-    default_sort_order = get_default_sort_order
+    
+    default_sort_order = get_default_sort_order()
 
     if request.method == 'POST':
         entry_form = EntryForm(request.POST)
@@ -168,6 +171,7 @@ def edit_list(request, grocList_pk):
         'entries': entries,
         'entry_form': entry_form.render("grocerylist/new_entry_form.html"),
         'default_sort_order': default_sort_order,
+        'no_default_sort_order_message': NO_DEFAULT_SORT_ORDER_MESSAGE,
     }
     return render(request, 'grocerylist/edit_list.html', context)
 

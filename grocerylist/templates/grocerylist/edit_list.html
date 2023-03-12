@@ -5,7 +5,7 @@
 {% block content %}
 
     {% if not default_sort_order %}
-        <h1> Warning: There is no default sort order defined. Please contact the system administrator. </h1>
+        <h1> Warning: {{no_default_sort_order_message}} </h1>
     {% endif %}
 
     <h1>Grocery list for {{list.shopping_date}}</h1>
