@@ -3,6 +3,11 @@
 {% block title %}List for {{list.shopping_date}}{% endblock title%}</title>
 
 {% block content %}
+
+    {% if not default_sort_order %}
+        <h1> Warning: There is no default sort order defined. Please contact the system administrator. </h1>
+    {% endif %}
+
     <h1>Grocery list for {{list.shopping_date}}</h1>
 
     <a href="{% url 'grocerylist:index' %}"><button>Home</button></a>

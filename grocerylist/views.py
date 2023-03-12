@@ -152,6 +152,7 @@ def process_entry_form(entry_form, grocList):
 def edit_list(request, grocList_pk):
     grocList = get_object_or_404(List, pk=grocList_pk)
     entries = grocList.entry_set.all()
+    default_sort_order = get_default_sort_order
 
     if request.method == 'POST':
         entry_form = EntryForm(request.POST)
@@ -166,12 +167,13 @@ def edit_list(request, grocList_pk):
         'list': grocList,
         'entries': entries,
         'entry_form': entry_form.render("grocerylist/new_entry_form.html"),
+        'default_sort_order': default_sort_order,
     }
     return render(request, 'grocerylist/edit_list.html', context)
 
 def sort(request, grocList_pk):
     grocList = get_object_or_404(List, pk=grocList_pk)
-    sort_order = SortOrder.objects.get(name='default')
+    sort_order = get_default_sort_order()
     sort_order_list = sort_order.sortorderslot_set.all().order_by('order_num')
     sorted_entries = []
 
@@ -188,6 +190,12 @@ def sort(request, grocList_pk):
         'sorted_entries': sorted_entries,
     }
     return render(request, 'grocerylist/sort.html', context)
+
+def get_default_sort_order():
+    try:
+        return SortOrder.objects.get(name='default')
+    except SortOrder.DoesNotExist:
+        return None
 
 def delete_entry(request, entry_pk):
     entry = get_object_or_404(Entry, pk=entry_pk)
