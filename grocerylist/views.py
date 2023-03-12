@@ -6,12 +6,12 @@ from django.forms import HiddenInput, ValidationError
 
 from nltk.corpus import words
 
-from .models import List, Entry, Item, Group, SortOrder
+from .models import List, Entry, Item, Group, SortOrder, SortOrderSlot
 from .forms import NewListForm, DeleteForm, EntryForm
 
 NO_DEFAULT_SORT_ORDER_MESSAGE = "There is no default sort order defined. Please contact the system administrator."
 NO_SORT_ORDER_SLOTS_MESSAGE = "There are no sections defined in the default sort order. Please contact the system administrator."
-NO_SECTIONS_MESSAGE = "There are no grocery sections available. Please contact the system administrator."
+NO_GROUPS_MESSAGE = "There are no grocery groups available. Please contact the system administrator."
 
 def index(request):
     lists = List.objects.all()
@@ -154,8 +154,10 @@ def process_entry_form(entry_form, grocList):
 def edit_list(request, grocList_pk):
     grocList = get_object_or_404(List, pk=grocList_pk)
     entries = grocList.entry_set.all()
-    
+
     default_sort_order = get_default_sort_order()
+    are_sort_order_slots = are_there_sort_order_slots()
+    are_groups = are_there_groups()
 
     if request.method == 'POST':
         entry_form = EntryForm(request.POST)
@@ -172,6 +174,10 @@ def edit_list(request, grocList_pk):
         'entry_form': entry_form.render("grocerylist/new_entry_form.html"),
         'default_sort_order': default_sort_order,
         'no_default_sort_order_message': NO_DEFAULT_SORT_ORDER_MESSAGE,
+        'are_sort_order_slots': are_sort_order_slots,
+        'no_sort_order_slots_message': NO_SORT_ORDER_SLOTS_MESSAGE,
+        'are_groups': are_groups,
+        'no_groups_message': NO_GROUPS_MESSAGE,
     }
     return render(request, 'grocerylist/edit_list.html', context)
 
@@ -200,6 +206,15 @@ def get_default_sort_order():
         return SortOrder.objects.get(name='default')
     except SortOrder.DoesNotExist:
         return None
+
+def are_there_sort_order_slots():
+    default_sort_oder = get_default_sort_order()
+    if default_sort_oder == None:
+        return False
+    return SortOrderSlot.objects.filter(sort_order=default_sort_oder).count() > 0
+
+def are_there_groups():
+    return Group.objects.all().count() > 0
 
 def delete_entry(request, entry_pk):
     entry = get_object_or_404(Entry, pk=entry_pk)

@@ -39,3 +39,6 @@ class SortOrderSlot(models.Model):
     sort_order = models.ForeignKey(to=SortOrder, on_delete=models.CASCADE)
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
     order_num = models.IntegerField()
+
+class TestMod(models.Model):
+    name = models.CharField(max_length=200)
