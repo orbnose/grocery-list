@@ -6,6 +6,13 @@ from django.urls import reverse
 from ..models import List, SortOrder, SortOrderSlot, Group
 from ..views import NO_DEFAULT_SORT_ORDER_MESSAGE, NO_SORT_ORDER_SLOTS_MESSAGE, NO_GROUPS_MESSAGE
 
+def set_up_lists():
+    # List pk=1
+    List.objects.create(shopping_date="2023-01-01")
+
+    # List pk=2
+    List.objects.create(shopping_date="2023-01-02")
+
 def set_up_expected_defaults():
     produce_front_group = Group.objects.create(name="Produce Front")
     produce_front_group.save()
@@ -24,11 +31,7 @@ def set_up_expected_defaults():
 class TestEditListView(TestCase):
     
     def setUp(self):
-        # List pk=1
-        List.objects.create(shopping_date="2023-01-01")
-
-        # List pk=2
-        List.objects.create(shopping_date="2023-01-02")
+        set_up_lists()
     
     def test_no_default_sort_order(self):
         response = self.client.get(reverse("grocerylist:edit_list", args=[1]))
