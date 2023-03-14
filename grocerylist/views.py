@@ -12,6 +12,7 @@ from .forms import NewListForm, DeleteForm, EntryForm
 NO_DEFAULT_SORT_ORDER_MESSAGE = "There is no default sort order defined. Please contact the system administrator."
 NO_SORT_ORDER_SLOTS_MESSAGE = "There are no sections defined in the default sort order. Please contact the system administrator."
 NO_GROUPS_MESSAGE = "There are no grocery groups available. Please contact the system administrator."
+COMMON_ITEMS_GROUPS_MISSING_MESSAGE = "There is at least one group missing for common weekly items. Please contact the system administrator in order to see and use the common items button."
 
 def index(request):
     lists = List.objects.all()
@@ -158,6 +159,7 @@ def edit_list(request, grocList_pk):
     default_sort_order = get_default_sort_order()
     are_sort_order_slots = are_there_sort_order_slots()
     are_groups = are_there_groups()
+    are_common_items_groups = are_there_common_items_groups()
 
     if request.method == 'POST':
         entry_form = EntryForm(request.POST)
@@ -178,6 +180,8 @@ def edit_list(request, grocList_pk):
         'no_sort_order_slots_message': NO_SORT_ORDER_SLOTS_MESSAGE,
         'are_groups': are_groups,
         'no_groups_message': NO_GROUPS_MESSAGE,
+        'are_common_item_groups': are_common_items_groups,
+        'missing_common_items_groups_message': COMMON_ITEMS_GROUPS_MISSING_MESSAGE,
     }
     return render(request, 'grocerylist/edit_list.html', context)
 
@@ -215,6 +219,17 @@ def are_there_sort_order_slots():
 
 def are_there_groups():
     return Group.objects.all().count() > 0
+
+def are_there_common_items_groups():
+    try:
+        Group.objects.get(name="Produce Front")
+    except Group.DoesNotExist:
+        return False
+    try:
+        Group.objects.get(name="Dairy")
+    except Group.DoesNotExist:
+        return False
+    return True
 
 def delete_entry(request, entry_pk):
     entry = get_object_or_404(Entry, pk=entry_pk)

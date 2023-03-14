@@ -4,12 +4,12 @@
 
 {% block content %}
 
-    {# --- --- --- WARNINGS for missing models --- --- --- #}
+    {# --- --- --- --- --- --- WARNINGS for missing models --- --- --- --- --- --- #}
     {% if not default_sort_order %}
         <h1> Warning: {{no_default_sort_order_message}} </h1>
     {% endif %}
 
-    {% if not are_sort_order_slots%}
+    {% if not are_sort_order_slots %}
         <h1> Warning: {{no_sort_order_slots_message}} </h1>
     {% endif %}
 
@@ -17,25 +17,33 @@
         <h1> Warning: {{no_groups_message}} </h1>
     {% endif %}
 
+    {% if not are_common_item_groups %}
+        <h1> Warning: {{missing_common_items_groups_message}} </h1>
+    {% endif %}
 
+    {# --- --- --- --- --- --- Button menu toolbar --- --- --- --- --- ---#}
     <h1>Grocery list for {{list.shopping_date}}</h1>
 
     <a href="{% url 'grocerylist:index' %}"><button>Home</button></a>
-    <a href="{% url 'grocerylist:add_common_items' list.pk %}"><button>Add Common Weekly Items</button></a>
+    {% if are_common_item_groups %}
+        <a href="{% url 'grocerylist:add_common_items' list.pk %}"><button>Add Common Weekly Items</button></a>
+    {% endif %}
     <a href="{% url 'grocerylist:sort' list.pk %}"><button>Sort</button></a>
     
     <span id="divider" class="ms-5">
         <a href="{% url 'grocerylist:delete_list' list.pk %}"><button>Delete List</button></a>
     </span>
 
-    <hr> {# -------------------------------------------------------------------------------------------------------- #}
+    <hr> {# ------------------------------------------------------------------------------------------------------------------ #}
     
+    {#--- --- --- --- --- --- Add Item Form --- --- --- --- --- ---#}
     <form action="{% url 'grocerylist:edit_list' list.pk %}" method="post">
         {% csrf_token %}
         {{entry_form}}
         <input type="submit" value="Save">
     </form>
 
+    {# --- --- --- --- --- --- Items Table --- --- --- --- --- ---#}
     <div class="table-responsive">
         <table class="table table-responsive table-striped">
             <tr>
