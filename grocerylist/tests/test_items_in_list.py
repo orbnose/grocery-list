@@ -27,8 +27,14 @@ def set_up_expected_defaults():
     slot2 = SortOrderSlot.objects.create(sort_order=default_sort_order, group=dairy_group, order_num=2)
     slot2.save()
 
-
 class TestEditListView(TestCase):
+    
+    def setUp(self):
+        set_up_lists()
+        set_up_expected_defaults()
+
+
+class TestEditListViewWithMissingModels(TestCase):
     
     def setUp(self):
         set_up_lists()
