@@ -14,6 +14,10 @@ NO_SORT_ORDER_SLOTS_MESSAGE = "There are no sections defined in the default sort
 NO_GROUPS_MESSAGE = "There are no grocery groups available. Please contact the system administrator."
 COMMON_ITEMS_GROUPS_MISSING_MESSAGE = "There is at least one group missing for common weekly items. Please contact the system administrator in order to see and use the common items button."
 
+ITEM_NOT_IN_DB_FORM_ERROR = "This item is not yet saved in the database. Please choose a section to go with it."
+NOT_VALID_SPELLING_FORM_ERROR = "This spelling is not recognized as a valid word. Would you like to ignore spelling?"
+ALREADY_ON_LIST_FORM_ERROR = "This item is already on this list!"
+
 def index(request):
     lists = List.objects.all()
     return render(request, 'grocerylist/index.html', {'lists': lists})
@@ -114,21 +118,21 @@ def process_entry_form(entry_form, grocList):
         # Check if item is already on the list
         entries = grocList.entry_set.all()
         if entries.filter(item=item):
-                entry_form.add_error('item', "This item is already on this list!")
+                entry_form.add_error('item', ALREADY_ON_LIST_FORM_ERROR)
                 return False, entry_form
 
     except Item.DoesNotExist:
         # Grab the chosen group for a new item, or give an error if blank
         group = entry_form.cleaned_data['section']
         if not group:
-            entry_form.add_error('item', "This item is not yet saved in the database. Please choose a section to go with it.")
+            entry_form.add_error('item', ITEM_NOT_IN_DB_FORM_ERROR)
             return False, entry_form
 
         # Spellcheck - Check to see if this spells a word according to nltk
         ignore_spelling = entry_form.cleaned_data['ignore_spelling']
         wordlist = words.words()
         if not submitted_item in wordlist and ignore_spelling is not True:
-            entry_form.add_error('item', "This spelling is not recognized as a valid word. Would you like to ignore spelling?")
+            entry_form.add_error('item', NOT_VALID_SPELLING_FORM_ERROR)
             return False, entry_form
         
         # Save new item into the db
