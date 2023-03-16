@@ -140,6 +140,28 @@ class TestEditListView(TestCase):
         self.assertContains(response, ALREADY_ON_LIST_FORM_ERROR)
         self.assertEqual(Entry.objects.filter(list=testlist).count(), 1)
 
+    def test_delete_entry(self):
+        #add new item
+        response = self.client.post(reverse("grocerylist:edit_list", args=[1]), 
+                                    data={
+                                        'item': 'rolled oats',
+                                        'quantity': '',
+                                        'section': Group.objects.get(name="Bulk").id,
+                                        'ignore_spelling': True,
+                                    })
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+
+        # delete the item
+        new_entry_id = 1
+        response = self.client.get(reverse("grocerylist:delete_entry", args=[new_entry_id]))
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        with self.assertRaises(Entry.DoesNotExist):
+            Entry.objects.get(pk=new_entry_id)
+        
+        # get 404 when trying to delete again
+        response = self.client.get(reverse("grocerylist:delete_entry", args=[new_entry_id]))
+        self.assertEqual(response.status_code, 404)
+
 class TestEditListViewWithMissingModels(TestCase):
     
     def setUp(self):
