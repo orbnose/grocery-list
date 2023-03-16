@@ -2,8 +2,7 @@ from email.policy import default
 from unittest.util import _MAX_LENGTH
 from django.db import models
 
-# Create your models here.
-
+# --- --- --- Shopping List Models --- --- ---
 class Group(models.Model):
     name = models.CharField(max_length=50)
 
@@ -40,5 +39,21 @@ class SortOrderSlot(models.Model):
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
     order_num = models.IntegerField()
 
-class TestMod(models.Model):
+# --- --- --- Recipe Models --- --- ---
+class Recipe(models.Model):
     name = models.CharField(max_length=200)
+
+class Unit(models.Model):
+    MEASUREMENT_CHOICES = [
+        ('weight',  'Weight'),
+        ('volume',  'Volume'),
+        ('count',   'Count'),
+    ]
+    name = models.CharField(max_length=200)
+    measurement_type = models.CharField(max_length=6, choices=MEASUREMENT_CHOICES)
+
+class Ingredient(models.Model):
+    recipe = models.ForeignKey(to=Recipe, on_delete=models.CASCADE)
+    item = models.ForeignKey(to=Item, on_delete=models.SET_NULL, null=True)    
+    quantity = models.DecimalField(max_digits=9, decimal_places=3)
+    unit = models.ForeignKey(to=Unit, on_delete=models.SET_NULL, null=True)
