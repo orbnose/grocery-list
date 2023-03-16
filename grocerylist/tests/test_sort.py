@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from ..models import List, SortOrder, SortOrderSlot, Group, Entry, Item
-from ..views import sort
+from ..views.sorted_view import sort
 
 from .test_items_in_list import set_up_lists, set_up_all_groups_and_sort_orders
 

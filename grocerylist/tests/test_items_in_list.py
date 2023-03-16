@@ -4,12 +4,12 @@ from django.test import TestCase
 from django.urls import reverse
 
 from ..models import List, SortOrder, SortOrderSlot, Group, Entry, Item
-from ..views import     (NO_DEFAULT_SORT_ORDER_MESSAGE, 
+from ..views.edit_list import     (NO_DEFAULT_SORT_ORDER_MESSAGE, 
                          NO_SORT_ORDER_SLOTS_MESSAGE, 
                          NO_GROUPS_MESSAGE, 
                          COMMON_ITEMS_GROUPS_MISSING_MESSAGE)
 
-from ..views import     (ITEM_NOT_IN_DB_FORM_ERROR,
+from ..views.edit_list import     (ITEM_NOT_IN_DB_FORM_ERROR,
                          NOT_VALID_SPELLING_FORM_ERROR,
                          ALREADY_ON_LIST_FORM_ERROR)
 
