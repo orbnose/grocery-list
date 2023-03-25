@@ -1,18 +1,11 @@
 from ..models import Unit
 
-class UnitHolder(object):
-    def __init__(self, input_label):
-        self.unit_label = self.convertLabel(input_label)
-        self.unit = self.getUnit(self.unit_label)
-    
-    def convertLabel(self, input_label: str):
-        input_label = input_label.lower()
-        return MEASURES_LOOKUP_TABLE.get(input_label, MISSING_KEY_VALUE)
+def get_unit_model(input_label:str):
+    unit_label = MEASURES_LOOKUP_TABLE.get(input_label.lower(), MISSING_KEY_VALUE)
+    if unit_label == MISSING_KEY_VALUE:
+        return None
+    return Unit.objects.get(name=unit_label)
 
-    def getUnit(self, unit_label: str):
-        pass
-        #return Unit.objects.get(name=unit_label)
-    
 MISSING_KEY_VALUE = "NO_UNIT"
 
 MEASURES_LOOKUP_TABLE = {

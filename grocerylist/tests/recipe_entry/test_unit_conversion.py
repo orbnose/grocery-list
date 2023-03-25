@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from ...recipe_entry.conversion import UnitHolder
+from ...recipe_entry.unit_conversion import get_unit_model
 
 test_input_labels = [['L', 'litre', 'litres', 'liter', 'liters',], 
                      ['mL', 'millilitre', 'millilitres', 'milliliter', 'milliliters',],
@@ -21,43 +21,45 @@ class TestUnitConversion(TestCase):
 
     def test_unit_label_conversion(self):
         for label in test_input_labels[0]:
-            self.assertEqual(UnitHolder(label).unit_label, "liter")
+            unit_conversion_assertions(self, label, "liter", "volume")
         
         for label in test_input_labels[1]:
-            self.assertEqual(UnitHolder(label).unit_label, "milliliter")
+            unit_conversion_assertions(self, label, "milliliter", "volume")
         
         for label in test_input_labels[2]:
-            self.assertEqual(UnitHolder(label).unit_label, "teaspoon")
+            unit_conversion_assertions(self, label, "teaspoon", "volume")
         
         for label in test_input_labels[3]:
-            self.assertEqual(UnitHolder(label).unit_label, "tablespoon")
+            unit_conversion_assertions(self, label, "tablespoon", "volume")
         
         for label in test_input_labels[4]:
-            self.assertEqual(UnitHolder(label).unit_label, "fluid ounce")
+            unit_conversion_assertions(self, label, "fluid ounce", "volume")
         
         for label in test_input_labels[5]:
-            self.assertEqual(UnitHolder(label).unit_label, "cup")
+            unit_conversion_assertions(self, label, "cup", "volume")
         
         for label in test_input_labels[6]:
-            self.assertEqual(UnitHolder(label).unit_label, "pint")
+            unit_conversion_assertions(self, label, "pint", "volume")
         
         for label in test_input_labels[7]:
-            self.assertEqual(UnitHolder(label).unit_label, "quart")
+            unit_conversion_assertions(self, label, "quart", "volume")
         
         for label in test_input_labels[8]:
-            self.assertEqual(UnitHolder(label).unit_label, "gallon")
+            unit_conversion_assertions(self, label, "gallon", "volume")
         
         for label in test_input_labels[9]:
-            self.assertEqual(UnitHolder(label).unit_label, "gram")
+            unit_conversion_assertions(self, label, "gram", "weight")
         
         for label in test_input_labels[10]:
-            self.assertEqual(UnitHolder(label).unit_label, "kilogram")
+            unit_conversion_assertions(self, label, "kilogram", "weight")
         
         for label in test_input_labels[11]:
-            self.assertEqual(UnitHolder(label).unit_label, "ounce")
+            unit_conversion_assertions(self, label, "ounce", "weight")
         
         for label in test_input_labels[12]:
-            self.assertEqual(UnitHolder(label).unit_label, "pound")
+            unit_conversion_assertions(self, label, "pound", "weight")
             
-
-
+def unit_conversion_assertions(testcase, input_label: str, correct_unit_label: str, correct_unit_type: str):
+    unit = get_unit_model(input_label)
+    testcase.assertEqual(unit.name, correct_unit_label)
+    testcase.assertEqual(unit.measurement_type, correct_unit_type)
