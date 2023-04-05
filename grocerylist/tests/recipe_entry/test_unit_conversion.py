@@ -15,6 +15,7 @@ test_input_labels = [['L', 'litre', 'litres', 'liter', 'liters',],
                      ['kg', 'kilogram', 'KiloGrams',],
                      ['OZ', 'ounce', 'ounces',],
                      ['lb', 'lbs', 'Pound', 'pounds'],
+                     ['count',],
                      ]
 
 class TestUnitConversion(TestCase):
@@ -58,6 +59,9 @@ class TestUnitConversion(TestCase):
         
         for label in test_input_labels[12]:
             unit_conversion_assertions(self, label, "pound", "weight")
+        
+        for label in test_input_labels[13]:
+            unit_conversion_assertions(self, label, "count", "count")
             
 def unit_conversion_assertions(testcase, input_label: str, correct_unit_label: str, correct_unit_type: str):
     unit = get_unit_model(input_label)

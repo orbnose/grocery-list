@@ -66,4 +66,6 @@ MEASURES_LOOKUP_TABLE = {
     "pound":    "pound",
     "pounds":   "pound",
 
+    "count":    "count",
+
 }
