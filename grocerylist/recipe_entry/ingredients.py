@@ -3,9 +3,12 @@ from fractions import Fraction
 
 from .unit_conversion import get_unit_model
 from ..models import Item, Ingredient, Recipe
-
+from django.core.validators import validate_email
 regex_ingredient_with_unit_pattern = r"^(?P<quantity>[-]?[0-9]+[.,]?[0-9]*([\/][0-9]+[.,]?[0-9]*)*)\s+(?P<unit>l|litre|litres|liter|liters|ml|millilitre|millilitres|milliliter|milliliters|tsp|teaspoon|teaspoons|tbsp|tablespoon|tablespoons|fl oz|fluid ounce|fluid ounces|c|cup|cups|pt|pint|pints|qt|quart|quarts|gal|gallon|gallons|g|gram|grams|kg|kilogram|kilograms|oz|ounce|ounces|lb|lbs|pound|pounds)\s+(?P<item>[^\d\\\n]+)$"
 regex_ingredient_no_unit_pattern = r"^(?P<quantity>[-]?[0-9]+[.,]?[0-9]*([\/][0-9]+[.,]?[0-9]*)*)\s+(?P<item>[^\d\\]+)$"
+
+# TODO: look into making these readable: https://stackoverflow.com/questions/8006551/how-to-split-long-regular-expression-rules-to-multiple-lines-in-python
+regex_combined_ingredient_pattern_without_capture = r"^([-]?[0-9]+[.,]?[0-9]*([\/][0-9]+[.,]?[0-9]*)*)\s+(l|litre|litres|liter|liters|ml|millilitre|millilitres|milliliter|milliliters|tsp|teaspoon|teaspoons|tbsp|tablespoon|tablespoons|fl oz|fluid ounce|fluid ounces|c|cup|cups|pt|pint|pints|qt|quart|quarts|gal|gallon|gallons|g|gram|grams|kg|kilogram|kilograms|oz|ounce|ounces|lb|lbs|pound|pounds)\s+([^\d\\\n]+)|([-]?[0-9]+[.,]?[0-9]*([\/][0-9]+[.,]?[0-9]*)*)\s+([^\d\\]+)$"
 
 def extract_ingredient(ingredient_line: str, recipe: Recipe) -> Ingredient:
     ingredient_line = ingredient_line.lower()

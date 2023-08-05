@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import index, new_list, edit_list, delete_list, add_common_items, sorted_view, delete_entry
+from .views import index, new_list, edit_list, delete_list, add_common_items, sorted_view, delete_entry, new_recipe
 
 app_name = 'grocerylist'
 urlpatterns = [
@@ -11,4 +11,5 @@ urlpatterns = [
     path('add_common_items/<int:grocList_pk>', views.add_common_items.add_common_items, name='add_common_items'),
     path('sort/<int:grocList_pk>', views.sorted_view.sorted_view, name="sort"),
     path('delete_entry/<int:entry_pk>', views.delete_entry.delete_entry, name='delete_entry'),
+    path('new_recipe/', views.new_recipe.new_recipe, name='new_recipe'),
 ]
